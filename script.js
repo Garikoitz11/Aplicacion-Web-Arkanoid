@@ -4,56 +4,101 @@ var ctx=canvas.getContext("2d");
 var w = canvas.width;
 var h= canvas.height;
 
-// Game Framework
-var GF = function(){
-  
-   var mainLoop = function(time){
-    // TU CÓDIGO AQUÍ
-    let posicionX = Math.floor(Math.random() * 140) + 5;
-    let posicionY = Math.floor(Math.random() * 140) + 5;
-
-    ctx.beginPath();
-    ctx.arc(posicionX, posicionY, 5, 0, 2 * Math.PI);
-    ctx.stroke();
-    ctx.fillStyle = "red";
-		ctx.fill();
-
-    requestAnimationFrame(mainLoop);
-  };
-  var start = function(){
-    requestAnimationFrame(mainLoop);
-  };
-  return {
-    start: start
-  };
+// Inits
+window.onload = function init() {
+  var game = new GF();
+  game.start();
 };
+
+
+// GAME FRAMEWORK 
+var GF = function(){
+
+ // variables para contar frames/s, usadas por measureFPS
+    var frameCount = 0;
+    var lastTime;
+    var fpsContainer;
+    var fps; 
+  
+    var measureFPS = function(newTime){
+   // la primera ejecución tiene una condición especial
+   
+         if(lastTime === undefined) {
+           lastTime = newTime; 
+           return;
+         }
+      
+ // calcular el delta entre el frame actual y el anterior
+        var diffTime = newTime - lastTime; 
+
+        if (diffTime >= 1000) {
+
+            fps = frameCount;    
+            frameCount = 0;
+            lastTime = newTime;
+        }
+
+   // mostrar los FPS en una capa del documento
+   // que hemos construído en la función start()
+       fpsContainer.innerHTML = 'FPS: ' + fps; 
+       frameCount++;
+    };
+  
+     // clears the canvas content
+     function clearCanvas() {
+       ctx.clearRect(0, 0, w, h);
+     }
+  
+     // Función para pintar la raqueta Vaus
+     function drawVaus(x, y) {
+	     // TU CÓDIGO AQUÍ
+        ctx.beginPath(); 
+        ctx.moveTo(x,y);
+        ctx.lineTo(x,y+10);
+        ctx.lineTo(x+30,y+10);
+        ctx.lineTo(x+30,y);
+        ctx.closePath(); 
+
+        ctx.stroke(); 
+    }
+  
+    var mainLoop = function(time){
+        //main function, called each frame 
+        measureFPS(time);
+
+        // Clear the canvas
+        clearCanvas();
+        
+        // draw the monster
+        drawVaus(10, 135);
+      
+        // call the animation loop every 1/60th of second
+        requestAnimationFrame(mainLoop);
+    };
+
+    var start = function(){
+        // adds a div for displaying the fps value
+        fpsContainer = document.createElement('div');
+        document.body.appendChild(fpsContainer);
+        
+        // start the animation
+        requestAnimationFrame(mainLoop);
+    };
+
+    //our GameFramework returns a public API visible from outside its scope
+    return {
+        start: start
+    };
+};
+
 
 var game = new GF();
 game.start();
 
 
 test('Testeando colores', function(assert) {  
-
-    var done = assert.async();
-    var rojos = 0;
+   // canvas, x,y, r,g,b, a, mezua
    
-  // ctx.fillStyle = 'red';
- //  ctx.fillRect(15,15,4,4);    
+   assert.pixelEqual( canvas, 10,135, 0,0,0,255,"Passed!");  
 
-  setTimeout(function() {
-         var colores = [];
-         
-         colores.push(
-         Array.prototype.slice.apply(canvas.getContext("2d").getImageData(15, 15, 1, 1).data), Array.prototype.slice.apply(canvas.getContext("2d").getImageData(45, 45, 1, 1).data), Array.prototype.slice.apply(canvas.getContext("2d").getImageData(75, 75, 1, 1).data), Array.prototype.slice.apply(canvas.getContext("2d").getImageData(105, 105, 1, 1).data),
- Array.prototype.slice.apply(canvas.getContext("2d").getImageData(135, 135, 1, 1).data)
-         );
-         
-   for(var i=0; i< colores.length; i++)
-      if (colores[i][0] == 255)
-            rojos++;
-         
-   assert.ok( rojos >= 1, "Passed!");  
-    done();
-  }, 10000 );
-    
 });
