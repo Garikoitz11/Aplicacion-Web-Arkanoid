@@ -24,9 +24,12 @@ var GF = function() {
   var fpsContainer;
   var fps, delta, oldTime = 0;
 
-  var direction = -1; // inicialmente movimiento a la izquierda
   var speed = 300; // px/s 
   var vausWidth = 30, vausHeight = 10;
+
+    // vars for handling inputs
+    var inputStates = {};
+
 
   var measureFPS = function(newTime) {
 
@@ -61,41 +64,39 @@ var GF = function() {
 
   // Función para pintar la raqueta Vaus
   function drawVaus(x, y) {
-   // TU CÓDIGO AQUÍ
-   ctx.beginPath(); 
-   ctx.moveTo(x,y);
-   ctx.lineTo(x,y+vausHeight);
-   ctx.lineTo(x+vausWidth,y+vausHeight);
-   ctx.lineTo(x+vausWidth,y);
-   ctx.closePath(); 
+// TU CÓDIGO AQUÍ
+		ctx.beginPath(); 
+   	ctx.moveTo(x,y);
+    ctx.lineTo(x,y+vausHeight);
+    ctx.lineTo(x+vausWidth,y+vausHeight);
+    ctx.lineTo(x+vausWidth,y);
+    ctx.closePath(); 
 
-   ctx.stroke();
-  }
+    ctx.stroke();
+}
 
   
   var calcDistanceToMove = function(delta, speed) {
-    // TU CÓDIGO AQUÍ
-     return (speed * delta) / 1000
-  };
+// TU CÓDIGO AQUÍ
+  	return (speed * delta) / 1000;
+};
 
   var updatePaddlePosition = function() {
+    
      var incX = Math.ceil(calcDistanceToMove(delta, speed));
-     // TU CÓDIGO AQUÍ
-     
-     // Usar incX y direction para actualizar la posición
-     // de Vaus. Debe moverse hacia la izquierda hasta chocar
-     // con la pared. En ese momento, debe moverse hacia la 
-     // derecha, hasta volver a chocar, y repetir el ciclo
-     if (x + incX + vausWidth < w  && direction > 0) {
-				x = x + incX;
-     }
-     else if (x - incX > 0  && direction < 0) {
-    		x = x - incX;
-     }
-     else {
-       	direction = direction * -1;
-     }
-  }
+
+          // check inputStates
+        // TU CÓDIGO AQUÍ
+      if (x + incX + vausWidth < w  && inputStates.right) {
+        x = x + incX;
+      }
+      else if (x - incX > 0  && inputStates.left) {
+        x = x - incX;
+      }
+      else if (inputStates.space){
+        console.log("Disparo");
+      }
+}
 
  function timer(currentTime) {
     var aux = currentTime - oldTime;
@@ -128,13 +129,43 @@ var GF = function() {
     fpsContainer = document.createElement('div');
     document.body.appendChild(fpsContainer);
 
-    test('60 fps', function(assert) {
-       assert.ok(5 == calcDistanceToMove(1/60*1000, speed), "Passed");
-    });
-
-    test('50 fps', function(assert) {
-    assert.ok(6 == calcDistanceToMove(1/50*1000, speed), "Passed");
-    });
+// TU CÓDIGO AQUÍ
+// Crea un listener para gestionar la pulsación
+// de izquierda, derecha o espacio
+// y actualiza inputStates.left .right o .space 
+// el listener será para keydown (pulsar)
+// y otro para keyup
+		document.addEventListener('keydown', function(event) {
+			switch (event.key) {
+        case "ArrowLeft":
+					inputStates.left = true;
+					break;
+        case "ArrowRight":
+					inputStates.right = true;
+          break;
+        case " ":
+					inputStates.space = true;
+          break;
+			}			
+      event.preventDefault();
+			event.stopPropagation();
+		});
+    
+    document.addEventListener('keyup', function(event) {
+			switch (event.key) {
+        case "ArrowLeft":
+					inputStates.left = false;
+					break;
+        case "ArrowRight":
+					inputStates.right = false;
+          break;
+        case " ":
+					inputStates.space = false;
+          break;
+			}			
+      event.preventDefault();
+			event.stopPropagation();
+		})
 
     // start the animation
     requestAnimationFrame(mainLoop);
