@@ -3,9 +3,9 @@ var canvas = document.querySelector("canvas");
 var ctx = canvas.getContext("2d");
 var w = canvas.width;
 var h = canvas.height;
-var haciaDerecha = true;
 
-var x = 10,
+
+var x = 130,
   y = 135;
 
 // Inits
@@ -15,25 +15,28 @@ window.onload = function init() {
 };
 
 
-// GAME FRAMEWORK 
+// GAME FRAMEWORK STARTS HERE
 var GF = function() {
 
+  // vars for counting frames/s, used by the measureFPS function
   var frameCount = 0;
   var lastTime;
   var fpsContainer;
-  var fps;
+  var fps, delta, oldTime = 0;
 
-  var speed = -5; // posición de Vaus
-  var vausWidth = 30,
-    vausHeight = 10;
+  var direction = -1; // inicialmente movimiento a la izquierda
+  var speed = 300; // px/s 
+  var vausWidth = 30, vausHeight = 10;
 
   var measureFPS = function(newTime) {
 
+    // test for the very first invocation
     if (lastTime === undefined) {
       lastTime = newTime;
       return;
     }
 
+    //calculate the difference between last & current frame
     var diffTime = newTime - lastTime;
 
     if (diffTime >= 1000) {
@@ -42,6 +45,9 @@ var GF = function() {
       frameCount = 0;
       lastTime = newTime;
     }
+
+    //and display it in an element we appended to the 
+    // document in the start() function
     fpsContainer.innerHTML = 'FPS: ' + fps;
     frameCount++;
   };
@@ -55,61 +61,86 @@ var GF = function() {
 
   // Función para pintar la raqueta Vaus
   function drawVaus(x, y) {
+   // TU CÓDIGO AQUÍ
+   ctx.beginPath(); 
+   ctx.moveTo(x,y);
+   ctx.lineTo(x,y+vausHeight);
+   ctx.lineTo(x+vausWidth,y+vausHeight);
+   ctx.lineTo(x+vausWidth,y);
+   ctx.closePath(); 
 
-    // TU CÓDIGO AQUÍ
-    ctx.beginPath(); 
-    ctx.moveTo(x,y);
-    ctx.lineTo(x,y+10);
-    ctx.lineTo(x+30,y+10);
-    ctx.lineTo(x+30,y);
-    ctx.closePath(); 
-
-    ctx.stroke();
+   ctx.stroke();
   }
 
-  var updatePaddlePosition = function() {
+  
+  var calcDistanceToMove = function(delta, speed) {
     // TU CÓDIGO AQUÍ
-    // Fíjate que GF tiene definidas ya variables de interés
-    // que tendrás que usar: x, y, speed, vausWidth, w
-    if (x > 0  && !haciaDerecha) {
-    	x--;
-    }
-    else if (x + vausWidth < w  && haciaDerecha) {
-    	x++;
-    }
-    else {
-    	haciaDerecha = !haciaDerecha
-    }
+     return (speed * delta) / 1000
+  };
+
+  var updatePaddlePosition = function() {
+     var incX = Math.ceil(calcDistanceToMove(delta, speed));
+     // TU CÓDIGO AQUÍ
+     
+     // Usar incX y direction para actualizar la posición
+     // de Vaus. Debe moverse hacia la izquierda hasta chocar
+     // con la pared. En ese momento, debe moverse hacia la 
+     // derecha, hasta volver a chocar, y repetir el ciclo
+     if (x + incX + vausWidth < w  && direction > 0) {
+				x = x + incX;
+     }
+     else if (x - incX > 0  && direction < 0) {
+    		x = x - incX;
+     }
+     else {
+       	direction = direction * -1;
+     }
+  }
+
+ function timer(currentTime) {
+    var aux = currentTime - oldTime;
+    oldTime = currentTime;
+    return aux;
     
-}
+  }
+    var mainLoop = function(time){
+        //main function, called each frame 
+        measureFPS(time);
+      
+        // number of ms since last frame draw
+        delta = timer(time);
 
-  var mainLoop = function(time) {
-    // funció principal, llamada en cada frame 
-    measureFPS(time);
-
-    // Borrar canvas
+    // Clear the canvas
     clearCanvas();
 
     // Mover Vaus de izquierda a derecha
     updatePaddlePosition();
 
-    // pintar Vaus
+    // draw Vaus
     drawVaus(x, y);
 
-    // animation loop, llamado cada 1/60 segundos
+    // call the animation loop every 1/60th of second
     requestAnimationFrame(mainLoop);
   };
 
   var start = function() {
-    // un div para mostrar los fps
+    // adds a div for displaying the fps value
     fpsContainer = document.createElement('div');
     document.body.appendChild(fpsContainer);
 
-    // comenzar la animación
+    test('60 fps', function(assert) {
+       assert.ok(5 == calcDistanceToMove(1/60*1000, speed), "Passed");
+    });
+
+    test('50 fps', function(assert) {
+    assert.ok(6 == calcDistanceToMove(1/50*1000, speed), "Passed");
+    });
+
+    // start the animation
     requestAnimationFrame(mainLoop);
   };
 
-  // API Público
+  //our GameFramework returns a public API visible from outside its scope
   return {
     start: start
   };
@@ -118,29 +149,3 @@ var GF = function() {
 
 var game = new GF();
 game.start();
-
-
-test('Testeando colores', function(assert) {
-  // canvas, x,y, r,g,b, a, mensaje
-  assert.pixelEqual(canvas, 10, 135, 0, 0, 0, 255, "Passed!");
-});
-
-
-
-test('Empieza moviéndose hacia la izquierda', function(assert) {
-  var done = assert.async();
-  setTimeout(function() {
-    assert.ok(x <= 20, "Passed!");
-    done();
-  }, 100);
-
-});
-
-test('Rebota hacia la derecha', function(assert) {
-  var done = assert.async();
-  setTimeout(function() {
-    assert.ok(x >= 20, "Passed!");
-    done();
-  }, 150);
-
-});
