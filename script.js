@@ -8,29 +8,44 @@ var x = 130,
 var delta;
 // var frames = 30;
 
-  function testCollisionWithWalls(ball, w, h) {
-        // TU CÓDIGO AQUÍ
-        if (ball.x + ball.diameter/2 > w) {
-        	ball.angle = -ball.angle + Math.PI;
-          ball.x = w - ball.diameter/2
-        	return false;
-        }
-        else if (ball.x < ball.diameter/2) {
-        	ball.angle = -ball.angle + Math.PI;
-          ball.x = ball.diameter/2
-        	return false;
-        }
-        else if (ball.y < ball.diameter/2) {
-					ball.angle = -ball.angle;
-          ball.y = ball.diameter/2;
-        	return false;
-        }
-        else if (ball.y + ball.diameter/2 > h) {
-					ball.angle = -ball.angle;
-          ball.y = h - ball.diameter/2;
-        	return true;
-        }
-    }
+function testCollisionWithWalls(ball, w, h) {
+      // TU CÓDIGO AQUÍ
+  if (ball.x + ball.diameter/2 > w) {
+    ball.angle = -ball.angle + Math.PI;
+    ball.x = w - ball.diameter/2
+    return false;
+  }
+  if (ball.x < ball.diameter/2) {
+    ball.angle = -ball.angle + Math.PI;
+    ball.x = ball.diameter/2
+    return false;
+  }
+  if (ball.y < ball.diameter/2) {
+    ball.angle = -ball.angle;
+    ball.y = ball.diameter/2;
+    return false;
+  }
+  if (ball.y + ball.diameter/2 > h) {
+    ball.angle = -ball.angle;
+    ball.y = h - ball.diameter/2;
+    return true;
+  }
+}
+
+function circRectsOverlap(x0, y0, w0, h0, cx, cy, r) {
+  var testX = cx;
+  var testY = cy;
+
+  if (testX < x0)
+      testX = x0;
+  if (testX > (x0 + w0))
+      testX = (x0 + w0);
+  if (testY < y0)
+      testY = y0;
+  if (testY > (y0 + h0))
+      testY = (y0 + h0);
+  return (((cx - testX) * (cx - testX) + (cy - testY) * (cy - testY)) < r * r);
+}
 
 // función auxiliar
 var calcDistanceToMove = function(delta, speed) {
@@ -182,6 +197,12 @@ var GF = function() {
       ball.move();
       
       var die = testCollisionWithWalls(ball, w, h);
+      var collision = circRectsOverlap(x, y, vausWidth, vausHeight, ball.x, ball.y, ball.diameter/2);
+
+      if (collision) {
+        ball.angle = -ball.angle;
+        ball.y = y - ball.diameter/2;
+      }
 
       ball.draw(ctx);
     }
