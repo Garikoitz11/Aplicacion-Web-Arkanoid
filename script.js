@@ -8,15 +8,40 @@ var x = 130,
 var delta;
 // var frames = 30;
 
+  function testCollisionWithWalls(ball, w, h) {
+        // TU CÓDIGO AQUÍ
+        if (ball.x + ball.diameter/2 > w) {
+        	ball.angle = -ball.angle + Math.PI;
+          ball.x = w - ball.diameter/2
+        	return false;
+        }
+        else if (ball.x < ball.diameter/2) {
+        	ball.angle = -ball.angle + Math.PI;
+          ball.x = ball.diameter/2
+        	return false;
+        }
+        else if (ball.y < ball.diameter/2) {
+					ball.angle = -ball.angle;
+          ball.y = ball.diameter/2;
+        	return false;
+        }
+        else if (ball.y + ball.diameter/2 > h) {
+					ball.angle = -ball.angle;
+          ball.y = h - ball.diameter/2;
+        	return true;
+        }
+    }
+
 // función auxiliar
 var calcDistanceToMove = function(delta, speed) {
-  // TU CÓDIGO AQUÍ
-    return (speed * delta) / 1000;
+      // TU CÓDIGO AQUÍ
+      return (speed * delta) / 1000;
+
   };
 
 function Ball(x, y, angle, v, diameter, sticky) {
-  // TU CÓDIGO AQUÍ
-  this.x = x;
+ // TU CÓDIGO AQUÍ
+	this.x = x;
   this.y = y;
   this.angle = angle;
   this.v = v;
@@ -33,7 +58,6 @@ function Ball(x, y, angle, v, diameter, sticky) {
       ctx.stroke();
       ctx.fillStyle = "green";
       ctx.fill();
-     
   };
 
   this.move = function(x, y) {
@@ -47,7 +71,7 @@ function Ball(x, y, angle, v, diameter, sticky) {
   // (animación basada en el tiempo)
   // OJO: la posición y no puede ser inferior a 0 en ningún momento
  // RECUERDA: delta es una variable global a la que puedes acceder...
-    if (x != undefined && y != undefined) {
+ 		if (x != undefined && y != undefined) {
       this.x = x;
       this.y = y;
     }
@@ -59,12 +83,8 @@ function Ball(x, y, angle, v, diameter, sticky) {
         this.y -= calcDistanceToMove(delta, incY);
       }
     }
- 
   };
-
 }
-
-
 
 // Inits
 window.onload = function init() {
@@ -119,8 +139,8 @@ var GF = function() {
   // clears the canvas content
   function clearCanvas() {
     ctx.clearRect(0, 0, w, h);
-   // ctx.fillStyle = 'green';
-   // ctx.fillRect(105,0,4,4);    
+    // ctx.fillStyle = 'green';
+    // ctx.fillRect(15,15,4,4);    
   }
 
   // Función para pintar la raqueta Vaus
@@ -153,13 +173,16 @@ var GF = function() {
     else if (inputStates.space){
       console.log("Disparo");
     }
-}
+  }
 
 
   function updateBalls() {
     for (var i = balls.length - 1; i >= 0; i--) {
       var ball = balls[i]; 
       ball.move();
+      
+      var die = testCollisionWithWalls(ball, w, h);
+
       ball.draw(ctx);
     }
   }
@@ -197,7 +220,7 @@ var GF = function() {
     fpsContainer = document.createElement('div');
     document.body.appendChild(fpsContainer);
 
- // TU CÓDIGO AQUÍ
+   // TU CÓDIGO AQUÍ
 // Crea un listener para gestionar la pulsación
 // de izquierda, derecha o espacio
 // y actualiza inputStates.left .right o .space 
@@ -235,31 +258,14 @@ var GF = function() {
 			event.stopPropagation();
 		});
 
+
 // TU CÓDIGO AQUÍ
 // Instancia una bola con los parámetros del enunciado e introdúcela en el array balls
 		var bola = new Ball(10, 70, Math.PI/3, 10, 12, false);
     balls.push(bola);
-    
+
     // start the animation
     requestAnimationFrame(mainLoop);
-    
-    // TESTING
-   test('La bola sube hasta arriba', function(assert) {
-  var done = assert.async();
-  setTimeout(function() {
-  var verdes = 0;
-  for (var i=50; i<145; i++) {  
-     // comprobar que la bola está pegada al techo, en algún punto de la esquina superior derecha
-      if (Array.prototype.slice.apply(canvas.getContext("2d").getImageData(i, 0, 1, 1).data)[1] > 0) verdes++; // componente G de RGB
-  } 
-  assert.ok(verdes>2, "Passed!");
-    done();
-  }, 8000);
-
-});
-
-
-    
   };
 
   //our GameFramework returns a public API visible from outside its scope
@@ -271,3 +277,37 @@ var GF = function() {
 
 var game = new GF();
 game.start();
+
+var ball1 = new Ball(48.68599000001268,2.993899778876827,1.0471975511965976, 10, 6, false);
+
+test('Colisión con pared superior', function(assert) {
+  var res_sup = testCollisionWithWalls(ball1, w, h);
+  assert.equal(ball1.x, 48.68599000001268, "Passed!");
+  assert.equal(ball1.y, 3, "Passed!");
+  assert.equal(ball1.angle,-1.0471975511965976, "Passed!");
+  assert.equal(res_sup, false);
+});
+
+
+var ball2 = new Ball( 131.84048499999335,147.02781021770147,-1.0471975511965976
+, 10, 6, false);
+
+test('Colisión con pared inferior', function(assert) {
+  var res_bottom = testCollisionWithWalls(ball2, w, h);
+  assert.equal(ball2.x,  131.84048499999335 , "Passed!");
+  assert.equal(ball2.y, 147, "Passed!");
+  assert.equal(ball2.angle,1.0471975511965976, "Passed!");
+  assert.equal(res_bottom, true);
+});
+
+
+var ball3 = new Ball(  147.0802850000473 ,120.60389210271744,1.0471975511965976
+, 10, 6, false);
+
+test('Colisión con pared izquierda', function(assert) {
+  var res_left = testCollisionWithWalls(ball3, w, h);
+  assert.equal(ball3.x, 147, "Passed!");
+  assert.equal(ball3.y,  120.60389210271744, "Passed!");
+  assert.equal(ball3.angle,  2.0943951023931957, "Passed!");
+  assert.equal(res_left, false);
+});
