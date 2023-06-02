@@ -3,8 +3,8 @@ var canvas = document.querySelector("canvas");
 var ctx = canvas.getContext("2d");
 var w = canvas.width;
 var h = canvas.height;
-var x = 130,
-  y = 135; // posición inicial de Vaus
+// var x = 130,
+//  y = 135; // posición inicial de Vaus
 var delta;
 var ANCHURA_LADRILLO = 20,
   ALTURA_LADRILLO = 10;
@@ -60,12 +60,12 @@ function circRectsOverlap(x0, y0, w0, h0, cx, cy, r) {
 }
 
 function testCollisionWithWalls(ball, w, h) {
-   // TU CÓDIGO AQUÍ
-		if (ball.x + ball.diameter/2 > w) {
-       ball.angle = -ball.angle + Math.PI;
-       ball.x = w - ball.diameter/2
-       return false;
-     }
+     // TU CÓDIGO AQUÍ
+    if (ball.x + ball.diameter/2 > w) {
+      ball.angle = -ball.angle + Math.PI;
+      ball.x = w - ball.diameter/2
+      return false;
+    }
     if (ball.x < ball.diameter/2) {
       ball.angle = -ball.angle + Math.PI;
       ball.x = ball.diameter/2
@@ -84,25 +84,25 @@ function testCollisionWithWalls(ball, w, h) {
 }
 
 function Brick(x, y, color) {
-     // TU CÓDIGO AQUÍ
-		this.x = x;
+    // TU CÓDIGO AQUÍ
+    this.x = x;
   	this.y = y;
   	this.color = color;
 }
 
 Brick.prototype = {
   draw: function(ctx) {
-       // TU CÓDIGO AQUÍ
-		ctx.beginPath(); 
-    ctx.moveTo(this.x,this.y);
-    ctx.lineTo(this.x,this.y+ALTURA_LADRILLO);
-    ctx.lineTo(this.x+ANCHURA_LADRILLO,this.y+ALTURA_LADRILLO);
-    ctx.lineTo(this.x+ANCHURA_LADRILLO,this.y);
-    ctx.closePath(); 
+      // TU CÓDIGO AQUÍ
+      ctx.beginPath(); 
+      ctx.moveTo(this.x,this.y);
+      ctx.lineTo(this.x,this.y+ALTURA_LADRILLO);
+      ctx.lineTo(this.x+ANCHURA_LADRILLO,this.y+ALTURA_LADRILLO);
+      ctx.lineTo(this.x+ANCHURA_LADRILLO,this.y);
+      ctx.closePath(); 
 
-    ctx.fillStyle = this.color;
-    ctx.fill();
-    ctx.stroke();
+      ctx.fillStyle = this.color;
+      ctx.fill();
+      ctx.stroke();
   }
 };
 
@@ -115,8 +115,8 @@ var calcDistanceToMove = function(delta, speed) {
 
 
 function Ball(x, y, angle, v, diameter, sticky) {
-    // TU CÓDIGO AQUÍ
-  this.x = x;
+     // TU CÓDIGO AQUÍ
+	this.x = x;
   this.y = y;
   this.angle = angle;
   this.v = v;
@@ -125,7 +125,7 @@ function Ball(x, y, angle, v, diameter, sticky) {
 
   this.draw = function(ctx) {
 
-     // TU CÓDIGO AQUÍ
+      // TU CÓDIGO AQUÍ
 		ctx.beginPath();
     ctx.arc(this.x, this.y, this.diameter/2, 0, 2 * Math.PI);
     ctx.stroke();
@@ -167,20 +167,28 @@ var GF = function() {
   var fpsContainer;
   var fps, oldTime = 0;
 
-  var speed = 300; // px/s 
-  var vausWidth = 30,
-    vausHeight = 10;
+//  var speed = 300; // px/s 
+//  var vausWidth = 30,   vausHeight = 10;
 
   var balls = [];
   var bricks = [];
   var bricksLeft;
   
-  // TU CÓDIGO AQUí
-  // declara e inicializa una variable lifes
   var lifes = 3;
 
   // vars for handling inputs
   var inputStates = {};
+
+  // NUEVO: VAUS en objeto literal 
+    var paddle = {
+        dead: false,
+        x: 10,
+        y: 130,
+        width: 32,
+        height: 8,
+        speed: 300, // pixels/s 
+      	sticky: false
+    };
 
 
   var ladrillos = [
@@ -230,19 +238,19 @@ var GF = function() {
     }
   ];
 
- 
 
+  
   var createBricks = function() {
      // TU CÓDIGO AQUÍ
-     	for (let i = 0; i < ladrillos.length; i++) {
+     for (let i = 0; i < ladrillos.length; i++) {
     		var ladrillo = ladrillos[i];
     		bricks.push(new Brick(ladrillo.x, ladrillo.y, ladrillo.c));
   		}
     }
-   
+    
   var drawBricks = function() {
    // TU CÓDIGO AQUÍ
-   	for (let i = 0; i < bricks.length; i++) {
+   for (let i = 0; i < bricks.length; i++) {
     	bricks[i].draw(ctx);
 		}
   };
@@ -280,7 +288,7 @@ var GF = function() {
 
   // TU CÓDIGO AQUÍ
   function testBrickCollision(ball) {
-    // TU CÓDIGO AQUÍ
+  // TU CÓDIGO AQUÍ
   // Para cada ladrillo
 	 	 	// comprobar si hay intersección entre bola y ladrillo
  	 		// si la hay, incrementar la velocidad de la bola
@@ -325,12 +333,12 @@ var GF = function() {
   // Función para pintar la raqueta Vaus
   function drawVaus(x, y) {
 
-    // TU CÓDIGO AQUÍ
-		ctx.beginPath(); 
-    ctx.moveTo(x,y);
-    ctx.lineTo(x,y+vausHeight);
-    ctx.lineTo(x+vausWidth,y+vausHeight);
-    ctx.lineTo(x+vausWidth,y);
+  // TU CÓDIGO AQUÍ
+  	ctx.beginPath(); 
+    ctx.moveTo(paddle.x,paddle.y);
+    ctx.lineTo(paddle.x,paddle.y+paddle.height);
+    ctx.lineTo(paddle.x+paddle.width,paddle.y+paddle.height);
+    ctx.lineTo(paddle.x+paddle.width,paddle.y);
     ctx.closePath(); 
 
     ctx.stroke();
@@ -338,23 +346,21 @@ var GF = function() {
 
     function displayLifes() {
     // TU CÓDIGO AQUÍ
-        // Muestra en la esquina superior derecha, en rojo, el número de vidas que quedan
-        // por ejemplo, Lifes: 3
-				ctx.fillStyle = "red"; 
-        ctx.fillText("Lifes: " + lifes, 195, 10);
+      ctx.fillStyle = "red"; 
+      ctx.fillText("Lifes: " + lifes, 195, 10);
     }
     
   var updatePaddlePosition = function() {
 
 
-    var incX = Math.ceil(calcDistanceToMove(delta, speed));
+    var incX = Math.ceil(calcDistanceToMove(delta, paddle.speed));
 
-   // TU CÓDIGO AQUÍ
-		if (x + incX + vausWidth < w  && inputStates.right) {
-      x = x + incX;
+    // TU CÓDIGO AQUÍ : NUEVO: USA LOS ATRIBUTOS DE PADDLE
+    if (paddle.x + incX + paddle.width < w  && inputStates.right) {
+      paddle.x = paddle.x + incX;
     }
-    else if (x - incX > 0  && inputStates.left) {
-      x = x - incX;
+    else if (paddle.x - incX > 0  && inputStates.left) {
+      paddle.x = paddle.x - incX;
     }
     else if (inputStates.space){
       console.log("Disparo");
@@ -370,26 +376,33 @@ var GF = function() {
       var die = testCollisionWithWalls(ball, w, h);
 
       // TU CÓDIGO AQUÍ
-       // si la bola ha caído por la parte inferior
-       // eliminarla del array de bolas
-       // Si no quedan bolas --> una vida menos
-       if (die) {
+      // Nuevo: gestiona la pérdida de una bola usando los atributos de paddle
+      if (die) {
+        paddle.dead = true;
        	balls.pop();
        	if (balls.length <= 0) {
         	lifes--;
         }
        }
-      
+       
+       if (paddle.dead) {
+       	var bola = new Ball(10, 70, Math.PI/3, 10, 12, false);
+   			balls.push(bola);
+        paddle.dead = false;
+       }
+       
+      // NUEVO
       // test if ball collides with any brick
       bricksLeft = testBrickCollision(ball);
 
       // TU CÓDIGO AQUÍ
       // Test if the paddle collides
-      var collision = circRectsOverlap(x, y, vausWidth, vausHeight, ball.x, ball.y, ball.diameter/2);
+      // NUEVO: Gestiona el rebote de la bola con Vaus usando los atributos de paddle
+			var collision = circRectsOverlap(paddle.x, paddle.y, paddle.width, paddle.height, ball.x, ball.y, ball.diameter/2);
 
       if (collision) {
         ball.angle = -ball.angle;
-        ball.y = y - ball.diameter/2;
+        ball.y = paddle.y - ball.diameter/2;
       }
       
       ball.draw(ctx);
@@ -418,16 +431,17 @@ var GF = function() {
     updateBalls();
 
     // draw Vaus
-    drawVaus(x, y);
+    // NUEVO: fíjate que ahora usamos paddle.x y paddle.y
+    drawVaus(paddle.x, paddle.y);
 
     // dibujar ladrillos
     drawBricks();
-    
-    // TU CÓDIGO AQUí
-    // Llama al método que pinta las vidas en pantalla
+
+    // TU CÓDIGO AQUÍ
+    // Mostrar vidas
     displayLifes();
-    
-    // call the animation loop every 1/60th of second
+
+   // call the animation loop every 1/60th of second
     requestAnimationFrame(mainLoop);
   };
 
@@ -490,10 +504,15 @@ var GF = function() {
    setTimeout(function() {
     assert.ok(lifes < 3, "Passed!");
     done();
-  }, 10000);
+  }, 10000);  
+  
 });
 
-    
+test('Comprobar paddle.dead', function(assert) {
+    assert.ok(paddle.dead == true, "Passed!");
+});
+
+  
   };
 
   //our GameFramework returns a public API visible from outside its scope
