@@ -60,8 +60,8 @@ function circRectsOverlap(x0, y0, w0, h0, cx, cy, r) {
 }
 
 function testCollisionWithWalls(ball, w, h) {
-     // TU CÓDIGO AQUÍ
-    if (ball.x + ball.diameter/2 > w) {
+      // TU CÓDIGO AQUÍ
+		if (ball.x + ball.diameter/2 > w) {
       ball.angle = -ball.angle + Math.PI;
       ball.x = w - ball.diameter/2
       return false;
@@ -84,25 +84,25 @@ function testCollisionWithWalls(ball, w, h) {
 }
 
 function Brick(x, y, color) {
-    // TU CÓDIGO AQUÍ
-    this.x = x;
+      // TU CÓDIGO AQUÍ
+		this.x = x;
   	this.y = y;
   	this.color = color;
 }
 
 Brick.prototype = {
   draw: function(ctx) {
-      // TU CÓDIGO AQUÍ
-      ctx.beginPath(); 
-      ctx.moveTo(this.x,this.y);
-      ctx.lineTo(this.x,this.y+ALTURA_LADRILLO);
-      ctx.lineTo(this.x+ANCHURA_LADRILLO,this.y+ALTURA_LADRILLO);
-      ctx.lineTo(this.x+ANCHURA_LADRILLO,this.y);
-      ctx.closePath(); 
+       // TU CÓDIGO AQUÍ
+    ctx.beginPath(); 
+    ctx.moveTo(this.x,this.y);
+    ctx.lineTo(this.x,this.y+ALTURA_LADRILLO);
+    ctx.lineTo(this.x+ANCHURA_LADRILLO,this.y+ALTURA_LADRILLO);
+    ctx.lineTo(this.x+ANCHURA_LADRILLO,this.y);
+    ctx.closePath(); 
 
-      ctx.fillStyle = this.color;
-      ctx.fill();
-      ctx.stroke();
+    ctx.fillStyle = this.color;
+    ctx.fill();
+    ctx.stroke();
   }
 };
 
@@ -110,22 +110,22 @@ Brick.prototype = {
 // función auxiliar
 var calcDistanceToMove = function(delta, speed) {
      // TU CÓDIGO AQUÍ
-   return (speed * delta) / 1000;
+	 return (speed * delta) / 1000;
 };
 
 
 function Ball(x, y, angle, v, diameter, sticky) {
-     // TU CÓDIGO AQUÍ
+      // TU CÓDIGO AQUÍ
 	this.x = x;
   this.y = y;
   this.angle = angle;
   this.v = v;
   this.diameter = diameter;
   this.sticky = sticky;
-
+  
   this.draw = function(ctx) {
 
-      // TU CÓDIGO AQUÍ
+        // TU CÓDIGO AQUÍ
 		ctx.beginPath();
     ctx.arc(this.x, this.y, this.diameter/2, 0, 2 * Math.PI);
     ctx.stroke();
@@ -134,7 +134,7 @@ function Ball(x, y, angle, v, diameter, sticky) {
   };
 
   this.move = function(x, y) {
-      // TU CÓDIGO AQUÍ
+       // TU CÓDIGO AQUÍ
 		if (x != undefined && y != undefined) {
     	this.x = x;
       this.y = y;
@@ -174,12 +174,22 @@ var GF = function() {
   var bricks = [];
   var bricksLeft;
   
-  var lifes = 3;
+  var lifes = 1;
 
   // vars for handling inputs
   var inputStates = {};
 
-  // NUEVO: VAUS en objeto literal 
+  // game states
+    var gameStates = {
+           // TU CÓDIGO AQUÍ
+			gameRunning: "Running",
+  		gameOver: "Over"
+    };
+
+//  var currentGameState =  ;    // TU CÓDIGO AQUÍ
+		var currentGameState =  gameStates.gameRunning;
+
+  // VAUS en objeto literal 
     var paddle = {
         dead: false,
         x: 10,
@@ -189,6 +199,7 @@ var GF = function() {
         speed: 300, // pixels/s 
       	sticky: false
     };
+
 
 
   var ladrillos = [
@@ -239,18 +250,18 @@ var GF = function() {
   ];
 
 
-  
+
   var createBricks = function() {
-     // TU CÓDIGO AQUÍ
-     for (let i = 0; i < ladrillos.length; i++) {
+      // TU CÓDIGO AQUÍ
+      for (let i = 0; i < ladrillos.length; i++) {
     		var ladrillo = ladrillos[i];
     		bricks.push(new Brick(ladrillo.x, ladrillo.y, ladrillo.c));
   		}
     }
-    
+  
   var drawBricks = function() {
-   // TU CÓDIGO AQUÍ
-   for (let i = 0; i < bricks.length; i++) {
+    // TU CÓDIGO AQUÍ
+    for (let i = 0; i < bricks.length; i++) {
     	bricks[i].draw(ctx);
 		}
   };
@@ -286,20 +297,9 @@ var GF = function() {
     // ctx.fillRect(15,15,4,4);    
   }
 
-  // TU CÓDIGO AQUÍ
+  
   function testBrickCollision(ball) {
-  // TU CÓDIGO AQUÍ
-  // Para cada ladrillo
-	 	 	// comprobar si hay intersección entre bola y ladrillo
- 	 		// si la hay, incrementar la velocidad de la bola
- 	 		// y rebotar la bola consecuentemente
- 	 		// recuerda que ya has implementado un rebote de bola contra
- 	 		// cualquiera de las paredes (left, right, top, bottom)
- 	 		// por lo que un rebote contra un ladrillo es exactamente igual
- 		  // En caso de colisión bola-ladrillo, elimina del array bricks
- 	  	// el ladrillo correspondiente
-
-   // devuelve el número de ladrillos que quedan
+   // TU CÓDIGO AQUÍ
    for (let i=0; i<bricks.length; i++) {
     	let colision = intersects(bricks[i].x, bricks[i].y, bricks[i].x + ANCHURA_LADRILLO, bricks[i].y + ALTURA_LADRILLO, ball.x, ball.y, ball.diameter/2)
     	if (colision.c) {
@@ -333,8 +333,8 @@ var GF = function() {
   // Función para pintar la raqueta Vaus
   function drawVaus(x, y) {
 
-  // TU CÓDIGO AQUÍ
-  	ctx.beginPath(); 
+    // TU CÓDIGO AQUÍ
+    ctx.beginPath(); 
     ctx.moveTo(paddle.x,paddle.y);
     ctx.lineTo(paddle.x,paddle.y+paddle.height);
     ctx.lineTo(paddle.x+paddle.width,paddle.y+paddle.height);
@@ -354,9 +354,8 @@ var GF = function() {
 
 
     var incX = Math.ceil(calcDistanceToMove(delta, paddle.speed));
-
-    // TU CÓDIGO AQUÍ : NUEVO: USA LOS ATRIBUTOS DE PADDLE
-    if (paddle.x + incX + paddle.width < w  && inputStates.right) {
+  // TU CÓDIGO AQUÍ
+  	if (paddle.x + incX + paddle.width < w  && inputStates.right) {
       paddle.x = paddle.x + incX;
     }
     else if (paddle.x - incX > 0  && inputStates.left) {
@@ -373,7 +372,7 @@ var GF = function() {
       var ball = balls[i];
       ball.move();
 
-      var die = testCollisionWithWalls(ball, w, h);
+     var die = testCollisionWithWalls(ball, w, h);
 
       // TU CÓDIGO AQUÍ
       // Nuevo: gestiona la pérdida de una bola usando los atributos de paddle
@@ -383,12 +382,6 @@ var GF = function() {
        	if (balls.length <= 0) {
         	lifes--;
         }
-       }
-       
-       if (paddle.dead) {
-       	var bola = new Ball(10, 70, Math.PI/3, 10, 12, false);
-   			balls.push(bola);
-        paddle.dead = false;
        }
        
       // NUEVO
@@ -425,24 +418,53 @@ var GF = function() {
     // Clear the canvas
     clearCanvas();
 
-    // Mover Vaus de izquierda a derecha
-    updatePaddlePosition();
-
-    updateBalls();
-
-    // draw Vaus
-    // NUEVO: fíjate que ahora usamos paddle.x y paddle.y
-    drawVaus(paddle.x, paddle.y);
-
-    // dibujar ladrillos
-    drawBricks();
-
     // TU CÓDIGO AQUÍ
-    // Mostrar vidas
-    displayLifes();
+    // NUEVO
+    // Si se ha perdido una vida, comprobar si quedan más 
+    // si no --> Game Over
+    // si quedan más --> sacar una nueva bola (y actualizar el atributo paddle.dead)
+		if (paddle.dead) {
+    	if (lifes <= 0) {
+      	currentGameState = gameStates.gameOver;
+      }
+      else {
+      	var bola = new Ball(10, 70, Math.PI/3, 10, 12, false);
+   			balls.push(bola);
+        paddle.dead = false;
+      }
+    }
 
-   // call the animation loop every 1/60th of second
-    requestAnimationFrame(mainLoop);
+  // TU CÓDIGO AQUÍ
+  // SI currentGameState = en ejecución
+   // todo sigue como antes: 
+   	if (currentGameState == gameStates.gameRunning) {
+    	// Mover Vaus de izquierda a derecha
+      updatePaddlePosition();
+
+      updateBalls();
+
+      // draw Vaus
+      drawVaus(paddle.x, paddle.y);
+
+      // dibujar ladrillos
+      drawBricks();
+
+      displayLifes();
+
+      // call the animation loop every 1/60th of second
+      requestAnimationFrame(mainLoop);
+    }
+
+
+  // PERO Si currentGameState = GAME OVER
+    // PINTAR la pantalla de negro y escribir GAME OVER    
+    else {
+    	ctx.fillStyle = "black";
+			ctx.fillRect(0, 0, w, h);
+      
+      ctx.fillStyle = "white";
+			ctx.fillText("Game Over", w/2-25, h/2);
+    }
   };
 
   var start = function() {
@@ -450,7 +472,7 @@ var GF = function() {
     fpsContainer = document.createElement('div');
     document.body.appendChild(fpsContainer);
 
-      // TU CÓDIGO AQUÍ
+     // TU CÓDIGO AQUÍ
 // Crea un listener para gestionar la pulsación
 // de izquierda, derecha o espacio
 // y actualiza inputStates.left .right o .space 
@@ -498,19 +520,19 @@ var GF = function() {
     // start the animation
     requestAnimationFrame(mainLoop);
     
-    test('Comprobar vidas', function(assert) {
+    test('Comprobar Game Over', function(assert) {
       var done = assert.async();
 
    setTimeout(function() {
-    assert.ok(lifes < 3, "Passed!");
+    assert.ok(paddle.dead == true, "Passed!");
+    assert.pixelEqual(canvas, 10, 10, 0,0,0,255, "Passed!");
+
     done();
   }, 10000);  
   
 });
 
-test('Comprobar paddle.dead', function(assert) {
-    assert.ok(paddle.dead == true, "Passed!");
-});
+
 
   
   };
