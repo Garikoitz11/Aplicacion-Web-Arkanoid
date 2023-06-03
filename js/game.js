@@ -10,7 +10,7 @@ function inicializarJuego() {
     var ANCHURA_LADRILLO = 20,
         ALTURA_LADRILLO = 10;
     var introMusic = false;
-    var soundEffects = false; 
+    var soundEffects = false;
 
     // var frames = 30;
 
@@ -375,7 +375,15 @@ function inicializarJuego() {
 
                 if (collision) {
                     sound.play('rebote');
-                    ball.angle = -ball.angle;
+
+                    if (inputStates.right)
+                        ball.angle = ball.angle * (ball.angle < 0 ? 0.5 : 1.5);
+                    else if (inputStates.left)
+                        ball.angle = ball.angle * (ball.angle > 0 ? 0.5 : 1.5);
+                    else {
+                        ball.angle = -ball.angle;
+                    }
+                    
                     ball.y = paddle.y - ball.diameter / 2;
                 }
 
@@ -500,11 +508,11 @@ function inicializarJuego() {
             sound = new Howl({
                 urls: ['/assets/sounds.mp3'],
                 volume: 1,
-                sprite : {
-                     point: [0,700],
-                     rebote : [11200, 500],
-                     salir: [1000,1700],
-                     empezar: [3000,2700]
+                sprite: {
+                    point: [0, 700],
+                    rebote: [11200, 500],
+                    salir: [1000, 1700],
+                    empezar: [3000, 2700]
                 },
                 onload: function () {
                     soundEffects = true;
@@ -513,7 +521,7 @@ function inicializarJuego() {
                     }
                 }
             });
-       
+
         }
 
         function initTerrain() {
