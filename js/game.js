@@ -9,6 +9,8 @@ function inicializarJuego() {
     var delta;
     var ANCHURA_LADRILLO = 20,
         ALTURA_LADRILLO = 10;
+    var introMusic = false;
+    var soundEffects = false; 
 
     // var frames = 30;
 
@@ -283,6 +285,7 @@ function inicializarJuego() {
             for (let i = 0; i < bricks.length; i++) {
                 let colision = intersects(bricks[i].x, bricks[i].y, bricks[i].x + ANCHURA_LADRILLO, bricks[i].y + ALTURA_LADRILLO, ball.x, ball.y, ball.diameter / 2)
                 if (colision.c) {
+                    sound.play('point');
                     if (colision.d == 'left') {
                         ball.angle = -ball.angle + Math.PI;
                         ball.x = bricks[i].x - ball.diameter / 2;
@@ -371,6 +374,7 @@ function inicializarJuego() {
                 var collision = circRectsOverlap(paddle.x, paddle.y, paddle.width, paddle.height, ball.x, ball.y, ball.diameter / 2);
 
                 if (collision) {
+                    sound.play('rebote');
                     ball.angle = -ball.angle;
                     ball.y = paddle.y - ball.diameter / 2;
                 }
@@ -486,9 +490,30 @@ function inicializarJuego() {
                 urls: ['assets/Game_Start.ogg'],
                 volume: 1,
                 onload: function () {
-                    callback();
+                    introMusic = true;
+                    if (introMusic && soundEffects) {
+                        callback();
+                    }
                 }
             }); // new Howl
+
+            sound = new Howl({
+                urls: ['/assets/sounds.mp3'],
+                volume: 1,
+                sprite : {
+                     point: [0,700],
+                     rebote : [11200, 500],
+                     salir: [1000,1700],
+                     empezar: [3000,2700]
+                },
+                onload: function () {
+                    soundEffects = true;
+                    if (introMusic && soundEffects) {
+                        callback();
+                    }
+                }
+            });
+       
         }
 
         function initTerrain() {
