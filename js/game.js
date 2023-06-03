@@ -197,7 +197,8 @@ function inicializarJuego() {
             width: 32,
             height: 8,
             speed: 300, // pixels/s 
-            sticky: false
+            sticky: false,
+            sprite: new Sprite('img/sprites.png', [224,40], [32,8], 16, [0,1])
         };
 
 
