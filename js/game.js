@@ -271,7 +271,7 @@ function inicializarJuego() {
         function clearCanvas() {
             ctx.clearRect(0, 0, w, h);
             ctx.fillStyle = terrainPattern;
-            ctx.fillRect(0, 0, w, h);			  
+            ctx.fillRect(0, 0, w, h);
 
             // ctx.fillStyle = 'green';
             // ctx.fillRect(15,15,4,4);    
@@ -480,12 +480,28 @@ function inicializarJuego() {
             }
         };
 
+        function loadAssets(callback) {
+            // Cargar sonido asíncronamente usando howler.js
+            music = new Howl({
+                urls: ['assets/Game_Start.ogg'],
+                volume: 1,
+                onload: function () {
+                    callback();
+                }
+            }); // new Howl
+        }
+
         function initTerrain() {
-            terrain = new Sprite('img/sprites.png', [0,80], [24, 32]);
-            terrainPattern =  ctx.createPattern ( terrain.image(), 'repeat') ;  // repeat forma un mosaico con el fondo
+            terrain = new Sprite('img/sprites.png', [0, 80], [24, 32]);
+            terrainPattern = ctx.createPattern(terrain.image(), 'repeat');  // repeat forma un mosaico con el fondo
         }
 
         function init() {
+            loadAssets(archivoCargado);
+        }
+
+        function archivoCargado() {
+            music.play();
             startNewGame();
             // comenzar la animación
             requestAnimationFrame(mainLoop);
