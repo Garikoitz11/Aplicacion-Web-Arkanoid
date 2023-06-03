@@ -294,6 +294,9 @@ function inicializarJuego() {
         // clears the canvas content
         function clearCanvas() {
             ctx.clearRect(0, 0, w, h);
+            ctx.fillStyle = terrainPattern;
+            ctx.fillRect(0, 0, w, h);			  
+
             // ctx.fillStyle = 'green';
             // ctx.fillRect(15,15,4,4);    
         }
@@ -501,6 +504,11 @@ function inicializarJuego() {
             }
         };
 
+        function initTerrain() {
+            terrain = new Sprite('img/sprites.png', [0,80], [24, 32]);
+            terrainPattern =  ctx.createPattern ( terrain.image(), 'repeat') ;  // repeat forma un mosaico con el fondo
+        }
+
         function init() {
             startNewGame();
             // comenzar la animación
@@ -508,6 +516,7 @@ function inicializarJuego() {
         }
 
         function startNewGame() {
+            initTerrain();
             balls.push(new Ball(10, 70, Math.PI / 3, 100, 6, false));
             createBricks();
         }
