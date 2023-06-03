@@ -503,29 +503,27 @@ function inicializarJuego() {
             }
         };
 
+        function init() {
+            startNewGame();
+            // comenzar la animación
+            requestAnimationFrame(mainLoop);
+        }
+
+        function startNewGame() {
+            balls.push(new Ball(10, 70, Math.PI / 3, 100, 6, false));
+            createBricks();
+        }
+
         var start = function () {
-            // adds a div for displaying the fps value
+            // capa div para visualizar los fps
             fpsContainer = document.createElement('div');
             document.body.appendChild(fpsContainer);
 
-            // TU CÓDIGO AQUÍ
-            // Crea un listener para gestionar la pulsación
-            // de izquierda, derecha o espacio
-            // y actualiza inputStates.left .right o .space 
-            // el listener será para keydown (pulsar)
-            // y otro para keyup
             inicializarGestorTeclado();
-
-            // TU CÓDIGO AQUÍ
-            // Instancia una bola con los parámetros del enunciado e introdúcela en el array balls
-            var bola = new Ball(10, 70, Math.PI / 3, 10, 12, false);
-            balls.push(bola);
-
-            createBricks();
-
-            // start the animation
-            requestAnimationFrame(mainLoop);
-
+            resources.load([
+                'img/sprites.png'
+            ]);
+            resources.onReady(init);
         };
 
         //our GameFramework returns a public API visible from outside its scope
