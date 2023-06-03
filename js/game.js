@@ -353,6 +353,7 @@ function inicializarJuego() {
 
         var updatePaddlePosition = function () {
 
+            paddle.sprite.update(delta);
 
             var incX = Math.ceil(calcDistanceToMove(delta, paddle.speed));
             // TU CÓDIGO AQUÍ
