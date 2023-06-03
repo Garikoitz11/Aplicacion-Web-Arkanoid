@@ -198,7 +198,7 @@ function inicializarJuego() {
             height: 8,
             speed: 300, // pixels/s 
             sticky: false,
-            sprite: new Sprite('img/sprites.png', [224,40], [32,8], 16, [0,1])
+            sprite: new Sprite('img/sprites.png', [224, 40], [32, 8], 16, [0, 1])
         };
 
 
@@ -322,7 +322,7 @@ function inicializarJuego() {
                     }
 
                     bricks.splice(i, 1);
-                    ball.v = ball.v * 2;
+                    ball.v = ball.v + 10;
                 }
             }
 
@@ -335,14 +335,10 @@ function inicializarJuego() {
         function drawVaus(x, y) {
 
             // TU CÓDIGO AQUÍ
-            ctx.beginPath();
-            ctx.moveTo(paddle.x, paddle.y);
-            ctx.lineTo(paddle.x, paddle.y + paddle.height);
-            ctx.lineTo(paddle.x + paddle.width, paddle.y + paddle.height);
-            ctx.lineTo(paddle.x + paddle.width, paddle.y);
-            ctx.closePath();
-
-            ctx.stroke();
+            ctx.save();
+            ctx.translate(x, y);
+            paddle.sprite.render(ctx);
+            ctx.restore();
         }
 
         function displayLifes() {
