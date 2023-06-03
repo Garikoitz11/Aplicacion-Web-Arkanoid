@@ -83,30 +83,6 @@ function inicializarJuego() {
         }
     }
 
-    function Brick(x, y, color) {
-        // TU CÓDIGO AQUÍ
-        this.x = x;
-        this.y = y;
-        this.color = color;
-    }
-
-    Brick.prototype = {
-        draw: function (ctx) {
-            // TU CÓDIGO AQUÍ
-            ctx.beginPath();
-            ctx.moveTo(this.x, this.y);
-            ctx.lineTo(this.x, this.y + ALTURA_LADRILLO);
-            ctx.lineTo(this.x + ANCHURA_LADRILLO, this.y + ALTURA_LADRILLO);
-            ctx.lineTo(this.x + ANCHURA_LADRILLO, this.y);
-            ctx.closePath();
-
-            ctx.fillStyle = this.color;
-            ctx.fill();
-            ctx.stroke();
-        }
-    };
-
-
     // función auxiliar
     var calcDistanceToMove = function (delta, speed) {
         // TU CÓDIGO AQUÍ
@@ -230,23 +206,23 @@ function inicializarJuego() {
             {
                 x: 20,
                 y: 42,
-                c: 'red'
+                c: 'yellow'
             }, {
                 x: 20 * 2 + ANCHURA_LADRILLO,
                 y: 42,
-                c: 'red'
+                c: 'yellow'
             }, {
                 x: 20 * 3 + ANCHURA_LADRILLO * 2,
                 y: 42,
-                c: 'red'
+                c: 'yellow'
             }, {
                 x: 20 * 4 + ANCHURA_LADRILLO * 3,
                 y: 42,
-                c: 'red'
+                c: 'yellow'
             }, {
                 x: 20 * 5 + ANCHURA_LADRILLO * 4,
                 y: 42,
-                c: 'red'
+                c: 'yellow'
             }
         ];
 
