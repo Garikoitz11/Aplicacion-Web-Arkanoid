@@ -228,6 +228,7 @@ function inicializarJuego() {
             }
         ];
 
+        var bonuses = []; // declarar e inicializar a vacío un array de bonus al comienzo de GF
 
 
         var createBricks = function () {
@@ -383,7 +384,7 @@ function inicializarJuego() {
                     else {
                         ball.angle = -ball.angle;
                     }
-                    
+
                     ball.y = paddle.y - ball.diameter / 2;
                 }
 
@@ -391,11 +392,17 @@ function inicializarJuego() {
             }
         }
 
+        function updateBonus() {
+            for (let i=0; i<bonuses.length; i++) {
+                bonuses[i].move(delta, calcDistanceToMove);
+                bonuses[i].draw(ctx);
+            }
+        }
+
         function timer(currentTime) {
             var aux = currentTime - oldTime;
             oldTime = currentTime;
             return aux;
-
         }
 
         function inicializarGestorTeclado() {
@@ -476,6 +483,8 @@ function inicializarJuego() {
 
                 displayLifes();
 
+                updateBonus();
+
                 // call the animation loop every 1/60th of second
                 requestAnimationFrame(mainLoop);
             }
@@ -544,6 +553,7 @@ function inicializarJuego() {
             initTerrain();
             balls.push(new Ball(10, 70, Math.PI / 3, 100, 6, false));
             createBricks();
+            bonuses.push(new Bonus()); // incluir esta línea a la función startNewGame()
         }
 
         var start = function () {
