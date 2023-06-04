@@ -117,13 +117,15 @@ function inicializarJuego() {
                 this.x = x;
                 this.y = y;
             }
-            else {
+            else if (!this.sticky) {
                 var incX = this.v * Math.cos(this.angle);
                 var incY = this.v * Math.sin(this.angle);
                 this.x += calcDistanceToMove(delta, incX);
                 if (this.y > 0) {
                     this.y -= calcDistanceToMove(delta, incY);
                 }
+            }
+            else {
             }
         };
 
@@ -643,9 +645,15 @@ function inicializarJuego() {
             // TU CÓDIGO AQUÍ
             if (paddle.x + incX + paddle.width < w && inputStates.right) {
                 paddle.x = paddle.x + incX;
+                if (balls[0].sticky) {
+                    balls[0].x = paddle.x + paddle.width/2
+                }
             }
             else if (paddle.x - incX > 0 && inputStates.left) {
                 paddle.x = paddle.x - incX;
+                if (balls[0].sticky) {
+                    balls[0].x = paddle.x + paddle.width/2
+                }
             }
             else if (inputStates.space) {
                 console.log("Disparo");
@@ -746,9 +754,15 @@ function inicializarJuego() {
             document.addEventListener('keyup', function (event) {
                 switch (event.key) {
                     case "ArrowLeft":
+                        if (balls[0].sticky) {
+                            balls[0].sticky = !balls[0].sticky;
+                        }
                         inputStates.left = false;
                         break;
                     case "ArrowRight":
+                        if (balls[0].sticky) {
+                            balls[0].sticky = !balls[0].sticky;
+                        }
                         inputStates.right = false;
                         break;
                     case " ":
@@ -782,8 +796,7 @@ function inicializarJuego() {
                 }
                 else {
                     sound.play('vidaPerdida');
-                    var bola = new Ball(10, 100, Math.PI / 3, currentSpeedBall, 6, false);
-                    console.log("PUESO")
+                    var bola = new Ball(paddle.x + paddle.width/2, paddle.y - 3, Math.PI / 3, currentSpeedBall, 6, true);
                     balls.push(bola);
                     paddle.dead = false;
                 }
@@ -887,7 +900,7 @@ function inicializarJuego() {
 
         function startNewGame() {
             initTerrain(terrains["1"], terrainsSize["small"]);
-            balls.push(new Ball(10, 150, Math.PI / 3, initialSpeedBall, 6, false));
+            balls.push(new Ball(paddle.x + paddle.width/2, paddle.y - 3, Math.PI / 3, initialSpeedBall, 6, true));
             createBricks();
             bonuses.push(new Bonus()); // incluir esta línea a la función startNewGame()
         }
