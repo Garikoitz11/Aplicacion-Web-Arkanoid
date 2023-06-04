@@ -170,7 +170,7 @@ function inicializarJuego() {
         // VAUS en objeto literal 
         var paddle = {
             dead: false,
-            x: w/2 - 16,
+            x: w / 2 - 16,
             y: 130,
             width: 32,
             height: 8,
@@ -646,13 +646,13 @@ function inicializarJuego() {
             if (paddle.x + incX + paddle.width < w && inputStates.right) {
                 paddle.x = paddle.x + incX;
                 if (balls[0].sticky) {
-                    balls[0].x = paddle.x + paddle.width/2
+                    balls[0].x = paddle.x + paddle.width / 2
                 }
             }
             else if (paddle.x - incX > 0 && inputStates.left) {
                 paddle.x = paddle.x - incX;
                 if (balls[0].sticky) {
-                    balls[0].x = paddle.x + paddle.width/2
+                    balls[0].x = paddle.x + paddle.width / 2
                 }
             }
             else if (inputStates.space) {
@@ -683,6 +683,9 @@ function inicializarJuego() {
                 bricksLeft = testBrickCollision(ball);
                 if (bricksLeft <= 0) {
                     level++;
+                    balls[0].sticky = true;
+                    balls[0].x = paddle.x + paddle.width / 2;
+                    balls[0].y = paddle.y - balls[0].diameter / 2;
                     if (level == 2) {
                         ball.v = initialSpeedBall;
                         initTerrain(terrains["2"], terrainsSize["normal"]);
@@ -736,39 +739,43 @@ function inicializarJuego() {
 
         function inicializarGestorTeclado() {
             document.addEventListener('keydown', function (event) {
-                switch (event.key) {
-                    case "ArrowLeft":
-                        inputStates.left = true;
-                        break;
-                    case "ArrowRight":
-                        inputStates.right = true;
-                        break;
-                    case " ":
-                        inputStates.space = true;
-                        break;
+                if (currentGameState == gameStates.gameRunning) {
+                    switch (event.key) {
+                        case "ArrowLeft":
+                            inputStates.left = true;
+                            break;
+                        case "ArrowRight":
+                            inputStates.right = true;
+                            break;
+                        case " ":
+                            inputStates.space = true;
+                            break;
+                    }
                 }
                 event.preventDefault();
                 event.stopPropagation();
             });
 
             document.addEventListener('keyup', function (event) {
-                switch (event.key) {
-                    case "ArrowLeft":
-                        if (balls[0].sticky) {
-                            balls[0].angle = (2/3) * Math.PI;
-                            balls[0].sticky = !balls[0].sticky;
-                        }
-                        inputStates.left = false;
-                        break;
-                    case "ArrowRight":
-                        if (balls[0].sticky) {
-                            balls[0].sticky = !balls[0].sticky;
-                        }
-                        inputStates.right = false;
-                        break;
-                    case " ":
-                        inputStates.space = false;
-                        break;
+                if (currentGameState == gameStates.gameRunning) {
+                    switch (event.key) {
+                        case "ArrowLeft":
+                            if (balls[0].sticky) {
+                                balls[0].angle = (2 / 3) * Math.PI;
+                                balls[0].sticky = !balls[0].sticky;
+                            }
+                            inputStates.left = false;
+                            break;
+                        case "ArrowRight":
+                            if (balls[0].sticky) {
+                                balls[0].sticky = !balls[0].sticky;
+                            }
+                            inputStates.right = false;
+                            break;
+                        case " ":
+                            inputStates.space = false;
+                            break;
+                    }
                 }
                 event.preventDefault();
                 event.stopPropagation();
@@ -797,7 +804,7 @@ function inicializarJuego() {
                 }
                 else {
                     sound.play('vidaPerdida');
-                    var bola = new Ball(paddle.x + paddle.width/2, paddle.y - 3, Math.PI / 3, currentSpeedBall, 6, true);
+                    var bola = new Ball(paddle.x + paddle.width / 2, paddle.y - 3, Math.PI / 3, currentSpeedBall, 6, true);
                     balls.push(bola);
                     paddle.dead = false;
                 }
@@ -901,7 +908,7 @@ function inicializarJuego() {
 
         function startNewGame() {
             initTerrain(terrains["1"], terrainsSize["small"]);
-            balls.push(new Ball(paddle.x + paddle.width/2, paddle.y - 3, Math.PI / 3, initialSpeedBall, 6, true));
+            balls.push(new Ball(paddle.x + paddle.width / 2, paddle.y - 3, Math.PI / 3, initialSpeedBall, 6, true));
             createBricks();
             bonuses.push(new Bonus()); // incluir esta línea a la función startNewGame()
         }
