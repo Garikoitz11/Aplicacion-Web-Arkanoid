@@ -1,7 +1,7 @@
 function Bonus() {
     this.type = 'C'; // para este ejemplo, sólo un tipo y marcado a fuego (hard-coded)
-    this.x = 50; // para este ejemplo, el bonus saldrá de esta posición. En el juego
-    this.y = 50; //  debería salir al azar desde la posición del ladrillo roto más reciente
+    this.x = Math.floor(Math.random() * (230-16)); // para este ejemplo, el bonus saldrá de esta posición. En el juego
+    this.y = Math.floor(Math.random() * 50); //  debería salir al azar desde la posición del ladrillo roto más reciente
     this.width = 16;  // ancho y alto
     this.height = 8;
     this.speed = 40; // velocidad, puedes trastear para ajustarla a lo que más te guste

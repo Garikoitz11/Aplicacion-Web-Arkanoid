@@ -768,7 +768,7 @@ function inicializarJuego() {
                             break;
                         case "ArrowRight":
                             if (balls[0].sticky) {
-                                balls[0].angle = Math.PI/3;
+                                balls[0].angle = Math.PI / 3;
                                 balls[0].sticky = !balls[0].sticky;
                             }
                             inputStates.right = false;
@@ -830,7 +830,12 @@ function inicializarJuego() {
                 displayLevel();
                 displayScore();
 
-                updateBonus();
+                if (bonuses.length > 0) {
+                    updateBonus();
+                }
+                if (Math.random() <= 0.0007) {
+                    bonuses.push(new Bonus()); // incluir esta línea a la función startNewGame()
+                }
 
                 // call the animation loop every 1/60th of second
                 requestAnimationFrame(mainLoop);
@@ -912,7 +917,6 @@ function inicializarJuego() {
             initTerrain(terrains["1"], terrainsSize["small"]);
             balls.push(new Ball(paddle.x + paddle.width / 2, paddle.y - 3, Math.PI / 3, initialSpeedBall, 6, true));
             createBricks();
-            bonuses.push(new Bonus()); // incluir esta línea a la función startNewGame()
         }
 
         var start = function () {
