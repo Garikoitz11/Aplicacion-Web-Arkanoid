@@ -850,7 +850,8 @@ function inicializarJuego() {
                 ctx.fillRect(0, 0, w, h);
 
                 ctx.fillStyle = "white";
-                ctx.fillText("Game Over", w / 2 - 25, h / 2);
+                ctx.fillText("GAME OVER", w / 2 - 35, h / 2 - 10);
+                ctx.fillText("Your score: " + score, w / 2 - 40, h / 2 + 10);
             }
             else {
                 sound.play('winner');
@@ -859,7 +860,8 @@ function inicializarJuego() {
                 ctx.fillRect(0, 0, w, h);
 
                 ctx.fillStyle = "black";
-                ctx.fillText("WINNER!!!!", w / 2 - 25, h / 2);
+                ctx.fillText("VICTORY!!", w / 2 - 30, h / 2 - 10);
+                ctx.fillText("Your score: " + score, w / 2 - 40, h / 2 + 10);
             }
         };
 
