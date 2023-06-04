@@ -125,8 +125,6 @@ function inicializarJuego() {
                     this.y -= calcDistanceToMove(delta, incY);
                 }
             }
-            else {
-            }
         };
 
     }
@@ -577,7 +575,7 @@ function inicializarJuego() {
                 let colision = intersects(bricks[i].x, bricks[i].y, bricks[i].x + ANCHURA_LADRILLO, bricks[i].y + ALTURA_LADRILLO, ball.x, ball.y, ball.diameter / 2)
                 if (colision.c) {
                     sound.play('point');
-                    score += 10 * level
+                    score += 10 * level;
                     if (colision.d == 'left') {
                         ball.angle = -ball.angle + Math.PI;
                         ball.x = bricks[i].x - ball.diameter / 2;
@@ -687,11 +685,13 @@ function inicializarJuego() {
                     balls[0].x = paddle.x + paddle.width / 2;
                     balls[0].y = paddle.y - balls[0].diameter / 2;
                     if (level == 2) {
+                        sound.play('nextLevel');
                         ball.v = initialSpeedBall;
                         initTerrain(terrains["2"], terrainsSize["normal"]);
                         createBricks();
                     }
                     else if (level == 3) {
+                        sound.play('nextLevel');
                         ball.v = initialSpeedBall;
                         initTerrain(terrains["3"], terrainsSize["normal"]);
                         createBricks();
@@ -768,6 +768,7 @@ function inicializarJuego() {
                             break;
                         case "ArrowRight":
                             if (balls[0].sticky) {
+                                balls[0].angle = Math.PI/3;
                                 balls[0].sticky = !balls[0].sticky;
                             }
                             inputStates.right = false;
@@ -878,6 +879,7 @@ function inicializarJuego() {
                     rebote: [11200, 500],
                     winner: [22000, 2000],
                     perder: [2800, 1200],
+                    nextLevel: [13700, 1000],
                     vidaPerdida: [15200, 500]
                 },
                 onload: function () {
