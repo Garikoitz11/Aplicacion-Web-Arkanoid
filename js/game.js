@@ -170,7 +170,7 @@ function inicializarJuego() {
         // VAUS en objeto literal 
         var paddle = {
             dead: false,
-            x: 10,
+            x: w/2 - 16,
             y: 130,
             width: 32,
             height: 8,
@@ -755,6 +755,7 @@ function inicializarJuego() {
                 switch (event.key) {
                     case "ArrowLeft":
                         if (balls[0].sticky) {
+                            balls[0].angle = (2/3) * Math.PI;
                             balls[0].sticky = !balls[0].sticky;
                         }
                         inputStates.left = false;
