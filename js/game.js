@@ -107,7 +107,7 @@ function inicializarJuego() {
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.diameter / 2, 0, 2 * Math.PI);
             ctx.stroke();
-            ctx.fillStyle = "red";
+            ctx.fillStyle = "white";
             ctx.fill();
         };
 
@@ -148,6 +148,8 @@ function inicializarJuego() {
         var lifes = 3;
 
         var level = 1;
+
+        var score = 0;
 
         // vars for handling inputs
         var inputStates = {};
@@ -573,6 +575,7 @@ function inicializarJuego() {
                 let colision = intersects(bricks[i].x, bricks[i].y, bricks[i].x + ANCHURA_LADRILLO, bricks[i].y + ALTURA_LADRILLO, ball.x, ball.y, ball.diameter / 2)
                 if (colision.c) {
                     sound.play('point');
+                    score += 10 * level
                     if (colision.d == 'left') {
                         ball.angle = -ball.angle + Math.PI;
                         ball.x = bricks[i].x - ball.diameter / 2;
@@ -613,8 +616,23 @@ function inicializarJuego() {
 
         function displayLifes() {
             // TU CÓDIGO AQUÍ
-            ctx.fillStyle = "red";
-            ctx.fillText("Lifes: " + lifes, 195, 10);
+            ctx.fillStyle = "white";
+            ctx.font = "bold 12px Arial";
+            ctx.fillText("Lifes: " + lifes, 130, 10);
+        }
+
+        function displayLevel() {
+            // TU CÓDIGO AQUÍ
+            ctx.fillStyle = "white";
+            ctx.font = "bold 12px Arial";
+            ctx.fillText("Level: " + level, 185, 10);
+        }
+
+        function displayScore() {
+            // TU CÓDIGO AQUÍ
+            ctx.fillStyle = "white";
+            ctx.font = "bold 12px Arial";
+            ctx.fillText("Score: " + score, 5, 10);
         }
 
         var updatePaddlePosition = function () {
@@ -787,6 +805,8 @@ function inicializarJuego() {
                 drawBricks();
 
                 displayLifes();
+                displayLevel();
+                displayScore();
 
                 updateBonus();
 
