@@ -1,6 +1,11 @@
 var coords = {
     red: [0, 0],
+    orange: [0, 8],
     yellow: [16, 0],
+    green: [16, 8],
+    blue: [32, 0],
+    darkBlue: [32, 8],
+    pink: [48, 0],
     grey: [48, 8]
 }
 

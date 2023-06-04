@@ -107,7 +107,7 @@ function inicializarJuego() {
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.diameter / 2, 0, 2 * Math.PI);
             ctx.stroke();
-            ctx.fillStyle = "green";
+            ctx.fillStyle = "red";
             ctx.fill();
         };
 
@@ -129,13 +129,6 @@ function inicializarJuego() {
 
     }
 
-    // Inits
-    window.onload = function init() {
-        var game = new GF();
-        game.start();
-    };
-
-
     // GAME FRAMEWORK STARTS HERE
     var GF = function () {
 
@@ -152,7 +145,9 @@ function inicializarJuego() {
         var bricks = [];
         var bricksLeft;
 
-        var lifes = 1;
+        var lifes = 3;
+
+        var level = 1;
 
         // vars for handling inputs
         var inputStates = {};
@@ -161,7 +156,8 @@ function inicializarJuego() {
         var gameStates = {
             // TU CÓDIGO AQUÍ
             gameRunning: "Running",
-            gameOver: "Over"
+            gameOver: "Over",
+            gameWinner: "Winner"
         };
 
         //  var currentGameState =  ;    // TU CÓDIGO AQUÍ
@@ -183,58 +179,348 @@ function inicializarJuego() {
 
         var ladrillos = [
             // grey
-            {
-                x: 20,
-                y: 20,
-                c: 'grey'
-            }, {
-                x: (20 * 2 + ANCHURA_LADRILLO),
-                y: 20,
-                c: 'grey'
-            }, {
-                x: 20 * 3 + ANCHURA_LADRILLO * 2,
-                y: 20,
-                c: 'grey'
-            }, {
-                x: 20 * 4 + ANCHURA_LADRILLO * 3,
-                y: 20,
-                c: 'grey'
-            }, {
-                x: 20 * 5 + ANCHURA_LADRILLO * 4,
-                y: 20,
-                c: 'grey'
-            },
-            // red
-            {
-                x: 20,
-                y: 42,
-                c: 'yellow'
-            }, {
-                x: 20 * 2 + ANCHURA_LADRILLO,
-                y: 42,
-                c: 'yellow'
-            }, {
-                x: 20 * 3 + ANCHURA_LADRILLO * 2,
-                y: 42,
-                c: 'yellow'
-            }, {
-                x: 20 * 4 + ANCHURA_LADRILLO * 3,
-                y: 42,
-                c: 'yellow'
-            }, {
-                x: 20 * 5 + ANCHURA_LADRILLO * 4,
-                y: 42,
-                c: 'yellow'
-            }
+            [
+                {
+                    x: 20,
+                    y: 20,
+                    c: 'red'
+                }, {
+                    x: (20 * 2 + ANCHURA_LADRILLO),
+                    y: 20,
+                    c: 'red'
+                }, {
+                    x: 20 * 3 + ANCHURA_LADRILLO * 2,
+                    y: 20,
+                    c: 'red'
+                }, {
+                    x: 20 * 4 + ANCHURA_LADRILLO * 3,
+                    y: 20,
+                    c: 'red'
+                }, {
+                    x: 20 * 5 + ANCHURA_LADRILLO * 4,
+                    y: 20,
+                    c: 'red'
+                },
+                // red
+                {
+                    x: 20,
+                    y: 42,
+                    c: 'orange'
+                }, {
+                    x: 20 * 2 + ANCHURA_LADRILLO,
+                    y: 42,
+                    c: 'orange'
+                }, {
+                    x: 20 * 3 + ANCHURA_LADRILLO * 2,
+                    y: 42,
+                    c: 'orange'
+                }, {
+                    x: 20 * 4 + ANCHURA_LADRILLO * 3,
+                    y: 42,
+                    c: 'orange'
+                }, {
+                    x: 20 * 5 + ANCHURA_LADRILLO * 4,
+                    y: 42,
+                    c: 'orange'
+                }
+            ],
+            [
+                {
+                    x: 11,
+                    y: 15,
+                    c: 'darkBlue'
+                }, {
+                    x: (11 * 2 + ANCHURA_LADRILLO),
+                    y: 15,
+                    c: 'darkBlue'
+                }, {
+                    x: 11 * 3 + ANCHURA_LADRILLO * 2,
+                    y: 15,
+                    c: 'darkBlue'
+                }, {
+                    x: 11 * 4 + ANCHURA_LADRILLO * 3,
+                    y: 15,
+                    c: 'darkBlue'
+                }, {
+                    x: 11 * 5 + ANCHURA_LADRILLO * 4,
+                    y: 15,
+                    c: 'darkBlue'
+                }, {
+                    x: 11 * 6 + ANCHURA_LADRILLO * 5,
+                    y: 15,
+                    c: 'darkBlue'
+                }, {
+                    x: 11 * 7 + ANCHURA_LADRILLO * 6,
+                    y: 15,
+                    c: 'darkBlue'
+                },
+
+                {
+                    x: 15.5,
+                    y: 30,
+                    c: 'blue'
+                }, {
+                    x: (15.5 * 2 + ANCHURA_LADRILLO),
+                    y: 30,
+                    c: 'blue'
+                }, {
+                    x: 15.5 * 3 + ANCHURA_LADRILLO * 2,
+                    y: 30,
+                    c: 'blue'
+                }, {
+                    x: 15.5 * 4 + ANCHURA_LADRILLO * 3,
+                    y: 30,
+                    c: 'blue'
+                }, {
+                    x: 15.5 * 5 + ANCHURA_LADRILLO * 4,
+                    y: 30,
+                    c: 'blue'
+                }, {
+                    x: 15.5 * 6 + ANCHURA_LADRILLO * 5,
+                    y: 30,
+                    c: 'blue'
+                },
+
+                {
+                    x: 11,
+                    y: 45,
+                    c: 'darkBlue'
+                }, {
+                    x: (11 * 2 + ANCHURA_LADRILLO),
+                    y: 45,
+                    c: 'darkBlue'
+                }, {
+                    x: 11 * 3 + ANCHURA_LADRILLO * 2,
+                    y: 45,
+                    c: 'darkBlue'
+                }, {
+                    x: 11 * 4 + ANCHURA_LADRILLO * 3,
+                    y: 45,
+                    c: 'darkBlue'
+                }, {
+                    x: 11 * 5 + ANCHURA_LADRILLO * 4,
+                    y: 45,
+                    c: 'darkBlue'
+                }, {
+                    x: 11 * 6 + ANCHURA_LADRILLO * 5,
+                    y: 45,
+                    c: 'darkBlue'
+                }, {
+                    x: 11 * 7 + ANCHURA_LADRILLO * 6,
+                    y: 45,
+                    c: 'darkBlue'
+                }
+            ],
+
+            [
+                {
+                    x: 5,
+                    y: 15,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO,
+                    y: 15,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 2,
+                    y: 15,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 3,
+                    y: 15,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 4,
+                    y: 15,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 5,
+                    y: 15,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 6,
+                    y: 15,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 7,
+                    y: 15,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 8,
+                    y: 15,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 9,
+                    y: 15,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 10,
+                    y: 15,
+                    c: 'yellow'
+                },
+
+                {
+                    x: 5,
+                    y: 25,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO,
+                    y: 25,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 2,
+                    y: 25,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 3,
+                    y: 25,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 4,
+                    y: 25,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 5,
+                    y: 25,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 6,
+                    y: 25,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 7,
+                    y: 25,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 8,
+                    y: 25,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 9,
+                    y: 25,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 10,
+                    y: 25,
+                    c: 'grey'
+                },
+
+                {
+                    x: 5,
+                    y: 35,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO,
+                    y: 35,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 2,
+                    y: 35,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 3,
+                    y: 35,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 4,
+                    y: 35,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 5,
+                    y: 35,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 6,
+                    y: 35,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 7,
+                    y: 35,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 8,
+                    y: 35,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 9,
+                    y: 35,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 10,
+                    y: 35,
+                    c: 'yellow'
+                },
+
+                {
+                    x: 5,
+                    y: 45,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO,
+                    y: 45,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 2,
+                    y: 45,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 3,
+                    y: 45,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 4,
+                    y: 45,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 5,
+                    y: 45,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 6,
+                    y: 45,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 7,
+                    y: 45,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 8,
+                    y: 45,
+                    c: 'grey'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 9,
+                    y: 45,
+                    c: 'yellow'
+                }, {
+                    x: 5 + ANCHURA_LADRILLO * 10,
+                    y: 45,
+                    c: 'grey'
+                },
+            ]
         ];
+
+        terrains = {
+            1: [0, 80],
+            2: [48, 80],
+            3: [144, 80]
+        }
+
+        terrainsSize = {
+            small: [24, 32],
+            normal: [32, 32],
+        }
+
+        var initialSpeedBall = 100;
+        var incrementSpeedBall = 7;
+        var currentSpeedBall = initialSpeedBall;
 
         var bonuses = []; // declarar e inicializar a vacío un array de bonus al comienzo de GF
 
 
         var createBricks = function () {
             // TU CÓDIGO AQUÍ
-            for (let i = 0; i < ladrillos.length; i++) {
-                var ladrillo = ladrillos[i];
+            for (let i = 0; i < ladrillos[level - 1].length; i++) {
+                var ladrillo = ladrillos[level - 1][i];
                 bricks.push(new Brick(ladrillo.x, ladrillo.y, ladrillo.c));
             }
         }
@@ -305,7 +591,8 @@ function inicializarJuego() {
                     }
 
                     bricks.splice(i, 1);
-                    ball.v = ball.v + 10;
+                    ball.v = ball.v + incrementSpeedBall;
+                    currentSpeedBall = ball.v;
                 }
             }
 
@@ -368,6 +655,22 @@ function inicializarJuego() {
                 // NUEVO
                 // test if ball collides with any brick
                 bricksLeft = testBrickCollision(ball);
+                if (bricksLeft <= 0) {
+                    level++;
+                    if (level == 2) {
+                        ball.v = initialSpeedBall;
+                        initTerrain(terrains["2"], terrainsSize["normal"]);
+                        createBricks();
+                    }
+                    else if (level == 3) {
+                        ball.v = initialSpeedBall;
+                        initTerrain(terrains["3"], terrainsSize["normal"]);
+                        createBricks();
+                    }
+                    else if (level > 3) {
+                        currentGameState = gameStates.gameWinner;
+                    }
+                }
 
                 // TU CÓDIGO AQUÍ
                 // Test if the paddle collides
@@ -393,7 +696,7 @@ function inicializarJuego() {
         }
 
         function updateBonus() {
-            for (let i=0; i<bonuses.length; i++) {
+            for (let i = 0; i < bonuses.length; i++) {
                 bonuses[i].move(delta, calcDistanceToMove);
                 bonuses[i].draw(ctx);
             }
@@ -460,7 +763,9 @@ function inicializarJuego() {
                     currentGameState = gameStates.gameOver;
                 }
                 else {
-                    var bola = new Ball(10, 70, Math.PI / 3, 10, 12, false);
+                    sound.play('vidaPerdida');
+                    var bola = new Ball(10, 100, Math.PI / 3, currentSpeedBall, 6, false);
+                    console.log("PUESO")
                     balls.push(bola);
                     paddle.dead = false;
                 }
@@ -492,12 +797,22 @@ function inicializarJuego() {
 
             // PERO Si currentGameState = GAME OVER
             // PINTAR la pantalla de negro y escribir GAME OVER    
-            else {
+            else if (currentGameState == gameStates.gameOver) {
+                sound.play('perder')
                 ctx.fillStyle = "black";
                 ctx.fillRect(0, 0, w, h);
 
                 ctx.fillStyle = "white";
                 ctx.fillText("Game Over", w / 2 - 25, h / 2);
+            }
+            else {
+                sound.play('winner');
+
+                ctx.fillStyle = "gold";
+                ctx.fillRect(0, 0, w, h);
+
+                ctx.fillStyle = "black";
+                ctx.fillText("WINNER!!!!", w / 2 - 25, h / 2);
             }
         };
 
@@ -520,8 +835,9 @@ function inicializarJuego() {
                 sprite: {
                     point: [0, 700],
                     rebote: [11200, 500],
-                    salir: [1000, 1700],
-                    empezar: [3000, 2700]
+                    winner: [22000, 2000],
+                    perder: [2800, 1200],
+                    vidaPerdida: [15200, 500]
                 },
                 onload: function () {
                     soundEffects = true;
@@ -533,8 +849,8 @@ function inicializarJuego() {
 
         }
 
-        function initTerrain() {
-            terrain = new Sprite('img/sprites.png', [0, 80], [24, 32]);
+        function initTerrain(number, size) {
+            terrain = new Sprite('img/sprites.png', number, size);
             terrainPattern = ctx.createPattern(terrain.image(), 'repeat');  // repeat forma un mosaico con el fondo
         }
 
@@ -550,8 +866,8 @@ function inicializarJuego() {
         }
 
         function startNewGame() {
-            initTerrain();
-            balls.push(new Ball(10, 70, Math.PI / 3, 100, 6, false));
+            initTerrain(terrains["1"], terrainsSize["small"]);
+            balls.push(new Ball(10, 150, Math.PI / 3, initialSpeedBall, 6, false));
             createBricks();
             bonuses.push(new Bonus()); // incluir esta línea a la función startNewGame()
         }
