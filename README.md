@@ -3,10 +3,10 @@
 Proyecto realizado para la asignatura Desarrollo de Aplicaciones Web Enriquecidas. Es una aplicación web en la que puedes jugar al clásico juego del Arkanoid.
 ## Requisitos
 - Navegador web.
+- Un servidor.
 ## Ejecución
 - Clonar el repositorio en el equipo: ```$ git clone <URL del repositorio> ```
-- Moverse dentro de la carpeta clonada: ```$ cd <nombre del repositorio>```
-- Pulsar en el archivo ```game.html```
+- Desplegar la aplicación en un servidor web como por ejemplo Apache. Opcionalmente, utilizando VS Code es posible descargarse la extensión Live Server y abriendo el directorio del repositorio en VS Code darle al botón Go Live para su despliegue.
 ## Funcionamiento
 La aplicación está desarrollada en HTML, CSS y mayoritariamente JavaScript y consiste en romper bloques rectangulares que aparecen en la parte superior de la pantalla con una bola que es golpeada por una raqueta controlada por el usuario.
 
