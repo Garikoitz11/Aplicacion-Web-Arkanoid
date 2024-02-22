@@ -879,7 +879,7 @@ function inicializarJuego() {
             }); // new Howl
 
             sound = new Howl({
-                urls: ['/assets/sounds.mp3'],
+                urls: ['assets/sounds.mp3'],
                 volume: 1,
                 sprite: {
                     point: [0, 700],
