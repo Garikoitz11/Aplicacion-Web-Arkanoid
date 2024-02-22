@@ -25,3 +25,5 @@ Una vez que se hayan superado los 3 niveles, se mostrará una interfaz gráfica 
 - En caso de no conseguir destruir un bloque intentar darle con efecto a la bola. (Cuando la raqueta toque la bola esta primera debe estar en movimiento)
 - En caso de ver que es muy difícil atravesar el nivel es posible hacerlo más sencillo bajando el valor de la variable **incrementSpeedBall**.
 - Es necesario que el usuario interactue con el navegador para que suenen los efectos de sonido.
+## Demo
+Es posible probar la aplicación web accediendo a la siguiente dirección: https://garikoitz11.github.io/Aplicacion-Web-Arkanoid/
